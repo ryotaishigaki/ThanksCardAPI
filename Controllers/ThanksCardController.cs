@@ -62,5 +62,27 @@ namespace ThanksCardAPI.Controllers
             // TODO: Error Handling
             return thanksCard;
         }
-    }       
+
+        #region DeleteThanksCards
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ThanksCard>> DeleteUser(long id)
+        {
+            var card = await _context.ThanksCards.FindAsync(id);
+            if (card == null)
+            {
+                return NotFound();
+            }
+
+            _context.ThanksCards.Remove(card);
+            await _context.SaveChangesAsync();
+
+            return card;
+        }
+
+        private bool UserExists(long id)
+        {
+            return _context.Users.Any(e => e.Id == id);
+        }
+        #endregion
+    }
 }
