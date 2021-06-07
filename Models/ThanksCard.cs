@@ -13,6 +13,7 @@ namespace ThanksCardAPI.Models
         public long ToId { get; set; }
         public virtual User To { get; set; }
         public DateTime CreatedDateTime { get; set; }
+        public int? ThanksRank { get; set; }
 
         public virtual ICollection<ThanksCardTag> ThanksCardTags { get; set; }
     }

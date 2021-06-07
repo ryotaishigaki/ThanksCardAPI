@@ -10,6 +10,8 @@
     <Compile Remove="Migrations\20190531043106_AddThanksCardTag.Designer.cs" />
     <Compile Remove="Migrations\20210526011908_ThanksCardAPI.cs" />
     <Compile Remove="Migrations\20210526011908_ThanksCardAPI.Designer.cs" />
+    <Compile Remove="Migrations\20210607061536_AddThanksRank.cs" />
+    <Compile Remove="Migrations\20210607061536_AddThanksRank.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
