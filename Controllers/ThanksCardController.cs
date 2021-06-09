@@ -33,6 +33,23 @@ namespace ThanksCardAPI.Controllers
         }
         #endregion
 
+        #region GetThanksTagCards
+        // GET: api/ThanksCardTag
+        [HttpGet("Tag")]
+        public async Task<ActionResult<IEnumerable<ThanksCard>>> GetTagThanksCards()
+        {
+            // Include を指定することで From, To (Userモデル) を同時に取得する。
+            return await _context.ThanksCards
+                                    .Include(ThanksCard => ThanksCard.From)
+                                    .Include(ThanksCard => ThanksCard.To)
+                                    .Include(ThanksCard => ThanksCard.ThanksCardTags)
+                                        .ThenInclude(ThanksCardTag => ThanksCardTag.Tag)
+                                    .Where(c => c.ThanksCardTags.Any(i => i.TagId == 2))
+                                    .ToListAsync();
+        }
+                                    
+        #endregion
+
         #region GetNumberThanksCards
         // GET: api/ThanksCard/5
         [HttpGet("{id}")]
