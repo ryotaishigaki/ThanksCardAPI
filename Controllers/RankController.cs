@@ -30,5 +30,17 @@ namespace ThanksCardAPI.Controllers
                 .Select(t => new Rank { Name = t.Key, Count = t.Count() })
                 .ToListAsync();
         }
+        
+        //new
+        [HttpGet("From")]
+        public async Task<ActionResult<IEnumerable<Rank>>> GetFromRanks()
+        {
+            // ThanksCard を送った回数をカウントしてリストで返す
+            return await _context.ThanksCards
+                .Include(ThanksCard => ThanksCard.From)
+                .GroupBy(x => x.From.Name)
+                .Select(t => new Rank { Name = t.Key, Count = t.Count() })
+                .ToListAsync();
+        }
     }
 }

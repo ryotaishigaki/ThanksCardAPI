@@ -33,6 +33,39 @@ namespace ThanksCardAPI.Controllers
         }
         #endregion
 
+        #region GetThanksTagCards
+        // GET: api/ThanksCardTag
+        [HttpGet("Tag")]
+        public async Task<ActionResult<IEnumerable<ThanksCard>>> GetTagThanksCards()
+        {
+            // Include を指定することで From, To (Userモデル) を同時に取得する。
+            return await _context.ThanksCards
+                                    .Include(ThanksCard => ThanksCard.From)
+                                    .Include(ThanksCard => ThanksCard.To)
+                                    .Include(ThanksCard => ThanksCard.ThanksCardTags)
+                                        .ThenInclude(ThanksCardTag => ThanksCardTag.Tag)
+                                    .Where(c => c.ThanksCardTags.Any(i => i.TagId == 2))
+                                    .ToListAsync();
+        }
+                                    
+        #endregion
+
+        #region GetNumberThanksCards
+        // GET: api/ThanksCard/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ThanksCard>> GetNumberThanksCards(long id)
+        {
+            var card = await _context.ThanksCards.FindAsync(id);
+
+            if (card == null)
+            {
+                return NotFound();
+            }
+
+            return card;
+        }
+        #endregion
+
         // POST api/ThanksCard
         [HttpPost]
         public async Task<ActionResult<ThanksCard>> Post([FromBody] ThanksCard thanksCard)
@@ -46,5 +79,27 @@ namespace ThanksCardAPI.Controllers
             // TODO: Error Handling
             return thanksCard;
         }
-    }       
+
+        #region DeleteThanksCards
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ThanksCard>> DeleteUser(long id)
+        {
+            var card = await _context.ThanksCards.FindAsync(id);
+            if (card == null)
+            {
+                return NotFound();
+            }
+
+            _context.ThanksCards.Remove(card);
+            await _context.SaveChangesAsync();
+
+            return card;
+        }
+
+        private bool UserExists(long id)
+        {
+            return _context.Users.Any(e => e.Id == id);
+        }
+        #endregion
+    }
 }
